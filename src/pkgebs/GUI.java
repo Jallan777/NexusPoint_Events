@@ -16,8 +16,6 @@ import java.util.ArrayList;
 
 public class GUI extends JFrame {
 
-    String adminUser = "";
-    String adminPass = "";
     static String windowName;
     private static int attempts = 3;
 
@@ -605,7 +603,6 @@ public class GUI extends JFrame {
 
                 for (Event event : bookedEvents) {
 
-                    //System.out.println("Adding event: " + event.getEventName()); debugging
                     //System.out.println(bookedEvents.size()); debugging
                     JPanel eventPanel = createEventPanel(event, font1, initialColour, hoverColour, false, true);
                     JLabel eventLabel = new JLabel(event.toString());
@@ -648,9 +645,7 @@ public class GUI extends JFrame {
                 + "Total Users:\t\t" + admin.getTotalUsers() + "\n"
                 + "Total Booked Users:\t" + admin.getTotalBookedUsers() + "\n";
 
-//        JLabel adminReport = new JLabel("Admin Report");
-//        adminReport.setFont(font2);
-//        adminReport.setForeground(Color.WHITE);
+
         JTextArea textArea = new JTextArea(reportInfo);
         textArea.setOpaque(false);
         textArea.setForeground(Color.WHITE);
@@ -1192,7 +1187,7 @@ public class GUI extends JFrame {
                 titlePanel = createSearchTitlePanel(contentPanel, filteredUsers.size(), 1, userKey);
 
                 for (User user : filteredUsers) {
-//                    
+                   
                     JPanel userPanel = createUserPanel(user, font1, initialColour, hoverColour, false);
                     usersPanel.add(userPanel);
 
@@ -1592,10 +1587,7 @@ public class GUI extends JFrame {
 
         List<User> users = userDB.getAllUserInDB();
 
-//        if(numUsers <= 0){
-//        
-//            return new ArrayList<>();
-//        }
+
         return users.subList(0, Math.min(users.size(), numUsers));
 
     }
@@ -1674,22 +1666,6 @@ public class GUI extends JFrame {
         titlePanel.setOpaque(false);
 
         JLabel titleLabel = new JLabel("There are " + usersdb.getUserCount() + " Users!");
-
-        titleLabel.setFont(font2);
-        titleLabel.setForeground(Color.WHITE);
-        titlePanel.add(titleLabel, BorderLayout.WEST);
-        return titlePanel;
-    }
-
-    private static JPanel createProfileTitlePanel(String username) {
-
-        UsersDB usersdb = new UsersDB();
-        User currentUser = usersdb.findFNameInDB(username);
-
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        titlePanel.setOpaque(false);
-
-        JLabel titleLabel = new JLabel("Welcome Back " + currentUser.getfName() + " !");
 
         titleLabel.setFont(font2);
         titleLabel.setForeground(Color.WHITE);
@@ -2483,7 +2459,7 @@ public class GUI extends JFrame {
                 }
 
             }
-            
+
         });
 
         JButton cancelButton = new JButton("Cancel");
@@ -2515,7 +2491,7 @@ public class GUI extends JFrame {
         delUserFrame.setVisible(true);
 
     }
-        
+
     public static void deleteEventFrame(boolean fromAdmin, String eventName) {
 
         EventsDB events = new EventsDB();
@@ -2542,8 +2518,8 @@ public class GUI extends JFrame {
         delEventMainPanel.add(usernameLabel);
         delEventMainPanel.add(eventNameField);
 
-        if(fromAdmin){
-        
+        if (fromAdmin) {
+
             eventNameField.setText(eventName);
         }
         deleteButton = new JButton("Delete Event");
@@ -2586,7 +2562,7 @@ public class GUI extends JFrame {
                 }
 
             }
-            
+
         });
 
         JButton cancelButton = new JButton("Cancel");
@@ -2618,95 +2594,6 @@ public class GUI extends JFrame {
         delEventFrame.setVisible(true);
 
     }
-    public static void quickBookFrame() {
 
-        UsersDB users = new UsersDB();
-        EventsDB events = new EventsDB();
-        BookingsDB bookings = new BookingsDB();
-
-        Connection conn = users.conn;
-        windowName = "Book Event";
-
-        JFrame bookEventFrame = new JFrame(windowName);
-        bookEventFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        bookEventFrame.setBackground(Color.decode(BG_COLOUR));
-        Dimension bookEventFrameSize = new Dimension(500, 350);
-        bookEventFrame.setPreferredSize(bookEventFrameSize);
-
-        JButton addButton;
-        JTextField usernameField;
-
-        JPanel bookEventMainPanel = new JPanel(new GridLayout(9, 2));
-        bookEventMainPanel.setBackground(Color.decode(BG_COLOUR));
-
-        JLabel usernameLabel = new JLabel("Enter Your Username: ");
-        usernameField = new JTextField();
-        usernameLabel.setForeground(Color.WHITE);
-        bookEventMainPanel.add(usernameLabel);
-        bookEventMainPanel.add(usernameField);
-
-        List<User> filteredUsers = UserManagement.search(usernameField.getText());
-        BookingSystem getBooked = new BookingSystem();
-
-        addButton = new JButton("Book!");
-        styleButton(addButton, initialColour, hoverColour, false);
-        addButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                double eventPrice = 0;
-
-                for (User user : filteredUsers) {
-
-                    if (user.getUsername().equals(usernameField.getText())) {
-
-                        //eventPrice = event.getEventCost();
-                        //String bookingRef = BookingSystem.generateReference(event.getEventName(), user.getfName(), user.getlName());
-                        //System.out.println(bookingRef);
-                        //generate reference from genreference function in bookingsystem
-                        //push new booking to bookingsDB
-                        JOptionPane.showMessageDialog(bookEventFrame, "Event Booked!\n\nYou can see your booked events in your account page", "Information", JOptionPane.INFORMATION_MESSAGE);
-                        bookEventFrame.dispose();
-                        break;
-                    }
-
-                }
-
-                JOptionPane.showMessageDialog(bookEventFrame, "Could not find event with name: ", "Error", JOptionPane.ERROR_MESSAGE);
-
-            }
-        });
-
-        bookEventFrame.dispose();
-
-        JButton cancelButton = new JButton("Cancel");
-        styleButton(cancelButton, initialColour, hoverColour, false);
-        cancelButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                bookEventFrame.dispose();
-            }
-        });
-
-        JPanel bookEventWrapperPanel = new JPanel();
-        bookEventWrapperPanel.setSize(400, 275);
-        bookEventWrapperPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        bookEventWrapperPanel.add(bookEventMainPanel);
-        bookEventWrapperPanel.setBackground(Color.decode(BG_COLOUR));
-
-        bookEventMainPanel.add(addButton);
-        bookEventMainPanel.add(cancelButton);
-
-        bookEventMainPanel.add(new JLabel()); // Empty label for spacing
-        bookEventMainPanel.add(new JLabel()); // Empty label for spacing
-
-        bookEventFrame.getContentPane().add(bookEventWrapperPanel, BorderLayout.CENTER);
-        bookEventFrame.pack();
-        bookEventFrame.setLocationRelativeTo(null); // Center the window
-        bookEventFrame.setVisible(true);
-
-    }
+    
 }

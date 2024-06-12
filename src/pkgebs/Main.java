@@ -4,11 +4,8 @@
  */
 package pkgebs;
 
-import java.util.Scanner;
-import java.util.InputMismatchException;
 import java.util.Random;
 import javax.swing.*;
-import java.awt.*;
 
 /**
  *

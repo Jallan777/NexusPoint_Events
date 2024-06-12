@@ -6,16 +6,8 @@ package pkgebs;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import java.sql.*;
 
 /**
  *
@@ -23,9 +15,9 @@ import java.sql.*;
  */
 public class DatabaseManager {
 
-    private static final String USER_NAME = "nexuspoint"; //your DB username
-    private static final String PASSWORD = "nexuspoint"; //your DB password
-    private static final String URL = "jdbc:derby:NPEvents_DB; create=true";  //url of the DB host
+    private static final String USER_NAME = "nexuspoint"; //database connection username
+    private static final String PASSWORD = "nexuspoint"; //database connection password
+    private static final String URL = "jdbc:derby:NPEvents_DB; create=true";  //url of the database host (Embedded)
 
     Connection conn;
 
