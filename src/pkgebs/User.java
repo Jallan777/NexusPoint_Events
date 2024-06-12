@@ -323,7 +323,7 @@ public class User {
                 case 3:
                     System.out.println("Logging Out and Returning to Main Menu\n");
                     Tools.generateLine(30, "*");
-                    Main.menu();
+                    //Main.menu();
                     break;
 
                 case 0:
@@ -385,7 +385,7 @@ public class User {
 
                     case 3:
                         System.out.println("Returning to Main Menu\n");
-                        Main.menu();
+                        //Main.menu();
                         break;
 
                     case 0:

@@ -117,6 +117,35 @@ public class EventsDB {
         }
     }
 
+        public void deleteEvent(String eventName){
+    
+        Connection conn = dbManager.getConnection();
+        
+        try{
+        
+            String query = "DELETE FROM EVENTS WHERE EVENTNAME = ?";
+            PreparedStatement prepstat = conn.prepareStatement(query);
+            
+            prepstat.setString(1, eventName);
+            
+            int rowsAffected = prepstat.executeUpdate();
+            
+            if(rowsAffected > 0){
+            
+                System.out.println("Event " + eventName + " deleted.");
+            } else {
+            
+                System.out.println("No event deleted." + eventName + " did not match any events");
+            }
+        } catch (SQLException oops){
+        
+            oops.printStackTrace();
+        } finally {
+        
+            closeConnection();
+        }
+    } 
+        
     public void addEventToDB(JTextField eName, JTextField eCost, JTextField eCap, JTextField eDays,
             JTextField eSessions, JTextField eSessionDur, JTextField imgPath, Connection con) {
 

@@ -124,7 +124,7 @@ public class EventManagement {
                 case 2:
                     System.out.println("Returning to Main Menu\n\n");
 
-                    Main.menu();
+                    //Main.menu();
 
                     break;
 

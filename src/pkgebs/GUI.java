@@ -379,6 +379,8 @@ public class GUI extends JFrame {
             addGlue(buttonPanel);
             addMenuButton(buttonPanel, "Add an Event", "ADDEVNT");
             addGlue(buttonPanel);
+            addMenuButton(buttonPanel, "Delete Event", "DELEVNT");
+            addGlue(buttonPanel);
             addMenuButton(buttonPanel, "Back to Admin Menu", "ADPRELOG");
             addGlue(buttonPanel);
             addMenuButton(buttonPanel, "Exit Program", "EXIT");
@@ -1293,6 +1295,8 @@ public class GUI extends JFrame {
                     addGlue(buttonPanel);
                     addMenuButton(buttonPanel, "Add an Event", "ADDEVNT");
                     addGlue(buttonPanel);
+                    addMenuButton(buttonPanel, "Delete Event", "DELEVNT");
+                    addGlue(buttonPanel);
                     addMenuButton(buttonPanel, "Back to Admin Menu", "ADPRELOG");
                     addGlue(buttonPanel);
                     addMenuButton(buttonPanel, "Exit Program", "EXIT");
@@ -1456,6 +1460,8 @@ public class GUI extends JFrame {
             addMenuButton(buttonPanel, "Find an Event", "FNDEVNT");
             addGlue(buttonPanel);
             addMenuButton(buttonPanel, "Add an Event", "ADDEVNT");
+            addGlue(buttonPanel);
+            addMenuButton(buttonPanel, "Delete Event", "DELEVNT");
             addGlue(buttonPanel);
             addMenuButton(buttonPanel, "Back to Admin Menu", "ADPRELOG");
             addGlue(buttonPanel);
@@ -1730,11 +1736,11 @@ public class GUI extends JFrame {
         if (!isUserView) {
             if (!isAdmin) {
 
-                bookNowButton.setText("Delete Booking");
+                bookNowButton.setText("Delete Event");
                 bookNowButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //Delete booking!
+                        deleteEventFrame(true, event.getEventName());
                     }
                 });
             } else {
@@ -2411,7 +2417,7 @@ public class GUI extends JFrame {
 
     }
 
-    public static void deleteFrame() {
+    public static void deleteUserFrame() {
 
         UsersDB users = new UsersDB();
 
@@ -2510,6 +2516,108 @@ public class GUI extends JFrame {
 
     }
         
+    public static void deleteEventFrame(boolean fromAdmin, String eventName) {
+
+        EventsDB events = new EventsDB();
+
+        Connection conn = events.conn;
+        windowName = "Delete Event";
+
+        JFrame delEventFrame = new JFrame(windowName);
+        delEventFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        delEventFrame.setBackground(Color.decode(BG_COLOUR));
+        Dimension delEventFrameSize = new Dimension(500, 350);
+        delEventFrame.setPreferredSize(delEventFrameSize);
+
+        JButton deleteButton;
+
+        JTextField eventNameField;
+
+        JPanel delEventMainPanel = new JPanel(new GridLayout(9, 2));
+        delEventMainPanel.setBackground(Color.decode(BG_COLOUR));
+
+        JLabel usernameLabel = new JLabel("Enter Name of event to Delete: ");
+        eventNameField = new JTextField();
+        usernameLabel.setForeground(Color.WHITE);
+        delEventMainPanel.add(usernameLabel);
+        delEventMainPanel.add(eventNameField);
+
+        if(fromAdmin){
+        
+            eventNameField.setText(eventName);
+        }
+        deleteButton = new JButton("Delete Event");
+        styleButton(deleteButton, initialColour, hoverColour, false);
+        deleteButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String eventName = eventNameField.getText().trim();
+
+                if (eventName.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(delEventFrame, "Event Name cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                List<Event> filteredEvents = EventManagement.search(eventName);
+
+                if (filteredEvents.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(delEventFrame, "Event not found with name: " + eventName, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                } else {
+
+                    int option = JOptionPane.showConfirmDialog(delEventFrame, "Are you sure you want to delete this event?", "Confirm Deletion", JOptionPane.OK_CANCEL_OPTION);
+
+                    if (option == JOptionPane.OK_OPTION) {
+
+                        events.deleteEvent(eventName);
+                        JOptionPane.showMessageDialog(delEventFrame, "Event Deleted Successfully!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                        delEventFrame.dispose();
+                        return;
+
+                    } else {
+                        delEventFrame.dispose();
+                        return;
+                    }
+
+                }
+
+            }
+            
+        });
+
+        JButton cancelButton = new JButton("Cancel");
+        styleButton(cancelButton, initialColour, hoverColour, false);
+        cancelButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                delEventFrame.dispose();
+            }
+        });
+
+        JPanel delEventWrapperPanel = new JPanel();
+        delEventWrapperPanel.setSize(400, 275);
+        delEventWrapperPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        delEventWrapperPanel.add(delEventMainPanel);
+        delEventWrapperPanel.setBackground(Color.decode(BG_COLOUR));
+
+        delEventMainPanel.add(deleteButton);
+        delEventMainPanel.add(cancelButton);
+
+        delEventMainPanel.add(new JLabel()); // Empty label for spacing
+        delEventMainPanel.add(new JLabel()); // Empty label for spacing
+
+        delEventFrame.getContentPane().add(delEventWrapperPanel, BorderLayout.CENTER);
+        delEventFrame.pack();
+        delEventFrame.setLocationRelativeTo(null); // Center the window
+        delEventFrame.setVisible(true);
+
+    }
     public static void quickBookFrame() {
 
         UsersDB users = new UsersDB();

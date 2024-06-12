@@ -244,7 +244,7 @@ public class Admin {
                 case 4:
                     System.out.println("\nReturning to the Main Menu\n\n\n");
                     Tools.generateLine(35, "*");
-                    Main.menu();
+                    //Main.menu();
                     return;
 
                 case 5:

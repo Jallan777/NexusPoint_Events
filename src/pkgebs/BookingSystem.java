@@ -77,7 +77,7 @@ public class BookingSystem {
 
             if (eventName.equals("!")) {
                 System.out.println("Returning you to Main Menu...\n\n");
-                Main.menu();
+                //Main.menu();
                 break;
             }
             event = EventManagement.getEvent(eventName);
